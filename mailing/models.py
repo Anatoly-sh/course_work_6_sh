@@ -47,7 +47,7 @@ class MailSetting(models.Model):
     mailing_period = models.CharField(max_length=10, choices=choices_period, verbose_name='Периодичность', **NULLABLE)
     status = models.CharField(max_length=10, choices=mailing_status, verbose_name='Статус рассылки', **NULLABLE)
     author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
-    destination = models.ManyToManyField(Client, verbose_name='Клиент', on_delete=models.CASCADE, **NULLABLE)
+    destination = models.ManyToManyField(Client, verbose_name='Клиент', **NULLABLE)
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение', **NULLABLE)
     launched_date = models.DateField(verbose_name='Дата отправки рассылки', **NULLABLE)
     is_active = models.BooleanField(default=False, verbose_name='Активация рассылки')

@@ -1,6 +1,19 @@
 {% extends "mailing/base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 
-    !!!
+    <div class="col">
+        <div class="col-lg-4">
+            <form method="post" enctype="multipart/form-data"> <!-- иначе данные разбиваются на части -->
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-success"
+                       value="{% if object %}Сохранить{% else %}Создать{% endif %}"><br><br>
+            </form>
+            <div class="card-footer">
+                <a href="{% url 'mailing:clients' %}" class="btn btn-primary"><< Все клиенты</a>
+            </div>
+        </div><!-- /.col-lg-4 -->
+    </div><!-- /.col -->
+
 {% endblock %}

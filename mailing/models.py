@@ -6,8 +6,8 @@ NULLABLE = {'blank': True, 'null': True}
 class Client(models.Model):
     email_contact = models.EmailField(max_length=150, unique=True, verbose_name='Адрес клиента')
     full_name = models.CharField(max_length=150, verbose_name='Полное имя', **NULLABLE)
-    comment = models.TextField(max_length=2000, verbose_name='Комментарий', **NULLABLE)
-    author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
+    comment = models.TextField(max_length=2000, verbose_name='Комментарии', **NULLABLE)
+    # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
 
     def __str__(self):
         return self.email_contact
@@ -46,8 +46,8 @@ class MailSetting(models.Model):
     mailing_stop = models.DateTimeField(verbose_name='Конец рассылки', **NULLABLE)
     mailing_period = models.CharField(max_length=10, choices=choices_period, verbose_name='Периодичность', **NULLABLE)
     status = models.CharField(max_length=10, choices=mailing_status, verbose_name='Статус рассылки', **NULLABLE)
-    author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
-    destination = models.ManyToManyField(Client, verbose_name='Клиент', **NULLABLE)
+    # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
+    destination = models.ManyToManyField(Client, verbose_name='Клиент')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение', **NULLABLE)
     launched_date = models.DateField(verbose_name='Дата отправки рассылки', **NULLABLE)
     is_active = models.BooleanField(default=False, verbose_name='Активация рассылки')
@@ -58,9 +58,9 @@ class MailSetting(models.Model):
     class Meta:
         verbose_name = 'Состояние'
         verbose_name_plural = 'Состояния'
-        permissions = ['can_deactivate_setting',
-                       'Can deactivate setting'
-                       ]
+        # permissions = ['can_deactivate_setting',
+        #                'Can deactivate setting'
+        #                ]
 
 
 class Attempt(models.Model):

@@ -1,6 +1,42 @@
 {% extends "mailing/base.html" %}
 
 {% block content %}
+    <h2>Перечень клиентов рассылки</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Электронная почта</th>
+            <th scope="col">Полное имя</th>
+            <th scope="col">Комментарии</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.pk }}</td>
+                <td>{{ object.email_contact }}</td>
+                <td>{{ object.full_name }}</td>
+                <td>{{ object.comment|slice:":30" }}</td>
+                <td><a class="btn btn-secondary" href="{% url 'mailing:client_detail' object.pk %}" role="button">Подробнее &raquo;</a></td>
+{#            {% url 'mailing:client_detail' object.pk %}#}
+            </tr>
+        {% endfor %}
+        </tbody>
 
-    !!!
+    </table>
+
+
+
 {% endblock %}
+
+<div class="p-5 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Custom jumbotron</h1>
+        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in
+            previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your
+            liking.</p>
+        <button class="btn btn-primary btn-lg" type="button">Example button</button>
+    </div>
+</div>

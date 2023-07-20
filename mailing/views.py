@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, TemplateView, DetailView
+from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView
 
 from mailing.form import ClientForm
 from mailing.models import Client
@@ -23,6 +23,11 @@ class ClientCreate(CreateView):
     #     instance = form.save()
     #     instance.author = self.request.user  # запись в таблицу Client автора записи
     #     return super().form_valid(form)
+
+
+class ClientDeleteView(DeleteView):
+    model = Client
+    success_url = reverse_lazy('mailing:clients')
 
 
 class MainPage(TemplateView):

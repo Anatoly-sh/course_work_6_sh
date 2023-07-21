@@ -1,7 +1,7 @@
 {% extends "mailing/base.html" %}
 
 {% block content %}
-    <h2>Перечень рассылок</h2>
+    <h2>Перечень рассылок сервиса</h2>
     {#    <div style="position: absolute; right: 9ch">#}
     {#        <a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Добавить запись</a>#}
     {#    </div>#}
@@ -26,7 +26,7 @@
                 <td>{{ object.mailing_period }}</td>
                 <td>{{ object.status }}
                 <td>{{ object.message }}
-                <td><a class="btn btn-secondary" href="{% url 'mailing:client_detail' object.pk %}" role="button">Подробнее
+                <td><a class="btn btn-secondary" href="{% url 'mailing:mail-setting-detail' object.pk %}" role="button">Подробнее
                     &raquo;</a></td>
                 {#            {% url 'mailing:client_detail' object.pk %}#}
             </tr>

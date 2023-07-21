@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "mailing/base.html" %}
 
-</body>
-</html>
+{% block content %}
+    <h2>Информация по рассылке</h2>
+    <div class="container-fluid py-5">
+        <h5 class="display-8 fw-bold">Сообщение: {{ object.message }}</h5>
+        <p class="col-md-8 fs-5">Начало рассылки: {{ object.mailing_start }}</p>
+        <p class="col-md-8 fs-5">Конец рассылки: {{ object.mailing_stop }}</p>
+        <p class="col-md-8 fs-5">Периодичность: {{ object.mailing_period }}</p>
+        <p class="col-md-8 fs-5">Дата отправки рассылки: {{ object.launched_date }}</p>
+        <p class="col-md-8 fs-5">Статус рассылки: {{ object.status }}</p>
+        <p class="col-md-8 fs-5">Клиент: {{ object.destination }}</p>
+        <p class="col-md-8 fs-5">Сообщение: {{ object.message }}</p>
+        <p class="col-md-8 fs-5">Активация рассылки: {{ object.is_active }}</p>
+        <div class="card-footer">
+            <a href="{% url 'mailing:clients' %}" class="btn btn-primary"><< Назад</a>
+            <a href="{% url 'mailing:client_delete' object.pk %}" class="btn btn-danger">Удалить рассылку</a>
+            {#            {% url 'mailing:client_delete' object.pk %}#}
+        </div>
+    </div>
+{% endblock %}
+
+<div class="p-5 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Custom jumbotron</h1>
+        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in
+            previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your
+            liking.</p>
+        <button class="btn btn-primary btn-lg" type="button">Example button</button>
+    </div>
+</div>

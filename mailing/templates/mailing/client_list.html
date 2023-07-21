@@ -2,9 +2,9 @@
 
 {% block content %}
     <h2>Перечень клиентов рассылки</h2>
-{#    <div style="position: absolute; right: 9ch">#}
-{#        <a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Добавить запись</a>#}
-{#    </div>#}
+    {#    <div style="position: absolute; right: 9ch">#}
+    {#        <a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Добавить запись</a>#}
+    {#    </div>#}
     <table class="table">
         <thead>
         <tr>
@@ -21,7 +21,10 @@
                 <td>{{ object.pk }}</td>
                 <td>{{ object.email_contact }}</td>
                 <td>{{ object.full_name }}</td>
-                <td>{{ object.comment|slice:":30" }}</td>
+                <td>{{ object.comment|slice:":30" }}
+                    {% if object.comment|length > 30 %}...
+                    {% endif %}
+                </td>
                 <td><a class="btn btn-secondary" href="{% url 'mailing:client_detail' object.pk %}" role="button">Подробнее
                     &raquo;</a></td>
                 {#            {% url 'mailing:client_detail' object.pk %}#}

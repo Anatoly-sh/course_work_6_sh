@@ -14,13 +14,13 @@
             <th scope="col">Периодичность</th>
             <th scope="col">Статус</th>
             <th scope="col">Сообщение</th>
-            <th scope="col"><a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Новая рассылка</a></th>
+            <th scope="col"><a href="{% url 'mailing:mail-setting-create' %}" class="btn btn-primary">Новая рассылка</a></th>
         </tr>
         </thead>
         <tbody>
         {% for object in object_list %}
             <tr>
-                <th scope="row">1</th>
+                <th>{{ object.id }}</th>
                 <td>{{ object.mailing_start }}</td>
                 <td>{{ object.mailing_stop }}</td>
                 <td>{{ object.mailing_period }}</td>

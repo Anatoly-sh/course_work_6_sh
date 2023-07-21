@@ -1,4 +1,4 @@
-from crispy_forms.layout import Submit, Layout
+from crispy_forms.layout import Submit
 from django import forms
 from crispy_forms.helper import FormHelper
 
@@ -13,8 +13,6 @@ class ClientForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Submit', css_class='btn-primary'))
         self.helper.form_method = 'POST'
 
-
-class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = '__all__'
@@ -28,8 +26,6 @@ class MailSettingForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Submit', css_class='btn-primary'))
         self.helper.form_method = 'POST'
 
-
-class MailSettingForm(forms.ModelForm):
     class Meta:
         model = MailSetting
         # fields = '__all__'

@@ -42,17 +42,17 @@ class MailSettingDetail(DetailView):
 class MailSettingCreate(CreateView):
     model = MailSetting
     form_class = MailSettingForm
-    success_url = reverse_lazy('mailing:clients')
+    success_url = reverse_lazy('mailing:mail-setting-list')
 
-    # def form_valid(self, form):
-    #     instance = form.save()
-    #     instance.author = self.request.user  # запись в таблицу Client автора записи
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        instance = form.save()
+        instance.author = self.request.user  # запись в таблицу Client автора записи
+        return super().form_valid(form)
 
 
 class MailSettingDelete(DeleteView):
     model = MailSetting
-    success_url = reverse_lazy('mailing:clients')
+    success_url = reverse_lazy('mailing:mail-setting-list')
 # ---------------------------------------------------------------------------------------
 
 

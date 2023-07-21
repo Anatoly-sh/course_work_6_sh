@@ -34,4 +34,3 @@ class MailSettingForm(forms.ModelForm):
         model = MailSetting
         # fields = '__all__'
         exclude = ('launched_date',)
-далее урлы и предст.

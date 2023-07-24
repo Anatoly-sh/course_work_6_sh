@@ -64,17 +64,21 @@ class MailSetting(models.Model):
 
 
 class Attempt(models.Model):
-    status = [
-        ('delivered', 'доставлено'),
-        ('not_delivered', 'не доставлено')
-    ]
+    DELIVERED = 'delivered'
+    NOT_DELIVERED = 'not_delivered'
+
+    status = (
+        (DELIVERED, 'доставлено'),
+        (NOT_DELIVERED, 'не доставлено'),
+    )
+
     attempt = models.ForeignKey(MailSetting, on_delete=models.CASCADE, verbose_name='Попытка', **NULLABLE)
-    attempt_time = models.DateTimeField(verbose_name='Дата попытки', **NULLABLE)
+    attempt_time = models.DateTimeField(auto_now_add=True, verbose_name='Дата попытки', **NULLABLE)
     attempt_status = models.CharField(choices=status, max_length=50, verbose_name='Статус попытки', **NULLABLE)
     server_answer = models.CharField(max_length=100, verbose_name='Ответ сервера', **NULLABLE)
 
     def __str__(self):
-        return self.attempt
+        return f'{self.attempt} {self.attempt_time} {self.attempt_status}'
 
     class Meta:
         verbose_name = 'Попытка рассылки'

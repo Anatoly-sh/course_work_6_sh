@@ -39,17 +39,33 @@ def mailing_and_statistic(mailing_queryset):
             letter_body = mess.letter_body
         # print(letter_subject)
         # print(letter_body)
-        send_mail(
-            subject=letter_subject,
-            message=letter_body,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[*client_list],
-            fail_silently=False,
-        )
-        print(letter_subject)
-        print(letter_body)
-        print(settings.EMAIL_HOST_USER)
-        print([*client_list])
+        status_list = []
+        try:
+            send_mail(
+                subject=letter_subject,
+                message=letter_body,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[*client_list],
+                fail_silently=False,
+            )
+        except Exception as exp:
+            server_response = {'attempt_status': Attempt.NOT_DELIVERED,
+                               'server_answer': 'Ошибка при отправке сообщения: {}'.format(str(exp)),
+                               'attempt': MailSetting.objects.get(pk=pk)}
+            status_list.append(Attempt(**server_response))
+        else:
+            server_response = {'attempt_status': Attempt.DELIVERED,
+                               'server_answer': 'Сообщение успешно отправлено',
+                               'attempt': MailSetting.objects.get(pk=pk)}
+            status_list.append(Attempt(**server_response))
+
+        Attempt.objects.bulk_create(status_list)
+
+
+        # print(letter_subject)
+        # print(letter_body)
+        # print(settings.EMAIL_HOST_USER)
+        # print([*client_list])
 
 def mailing_subject_renew():
     """
@@ -84,24 +100,4 @@ class Command(BaseCommand):
         mailing_and_statistic(active_mailing)
 # ------------------------------------------------------
 
-        emails = []  # список почтовых адресов клиентов для рассылки
-        # for client in Client.objects.all():     # отфильтровать клиентов пользователя!!!
-        #     emails.append(str(client.email_contact))
-        #     print(client.email_contact)
 
-        # for mailing in MailSetting.objects.all().filter(is_active=True):       # перебор рассылок
-        #     mess = mailing.message
-        #     print(mess)
-        #     message_obj = Message.objects.filter(letter_subject=mess)
-        # for mess in message_obj:                    # для каждой рассылки
-        # print(mess.letter_subject)
-        # print(mess.letter_body)
-        # print(mailing.status)
-        # print('---------------------------------------')
-        # send_mail(
-        #     subject=mess.letter_subject,
-        #     message=mess.letter_body,
-        #     from_email=settings.EMAIL_HOST_USER,
-        #     recipient_list=[*emails],
-        #     fail_silently=False,
-        # )

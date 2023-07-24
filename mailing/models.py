@@ -7,14 +7,14 @@ class Client(models.Model):
     email_contact = models.EmailField(max_length=150, unique=True, verbose_name='Адрес клиента')
     full_name = models.CharField(max_length=150, verbose_name='Полное имя', **NULLABLE)
     comment = models.TextField(max_length=2000, verbose_name='Комментарии', **NULLABLE)
-    # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
+    # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Кем создан', **NULLABLE)
 
     def __str__(self):
         return self.email_contact
 
     class Meta:
-        verbose_name = 'Контакт'
-        verbose_name_plural = 'Контакты'
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'Клиенты'
 
 
 class Message(models.Model):
@@ -47,7 +47,7 @@ class MailSetting(models.Model):
     mailing_period = models.CharField(max_length=10, choices=choices_period, verbose_name='Периодичность', **NULLABLE)
     status = models.CharField(max_length=10, choices=mailing_status, verbose_name='Статус рассылки', **NULLABLE)
     # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
-    destination = models.ManyToManyField(Client, verbose_name='Клиент')
+    client = models.ManyToManyField(Client, related_name='clients', verbose_name='Клиент')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение', **NULLABLE)
     launched_date = models.DateField(verbose_name='Дата отправки рассылки', **NULLABLE)
     is_active = models.BooleanField(default=False, verbose_name='Активация рассылки')
@@ -56,8 +56,8 @@ class MailSetting(models.Model):
         return f'{self.message} / {self.status}'
 
     class Meta:
-        verbose_name = 'Состояние'
-        verbose_name_plural = 'Состояния'
+        verbose_name = 'Рассылка: параметры'
+        verbose_name_plural = 'Рассылки: параметры'
         # permissions = ['can_deactivate_setting',
         #                'Can deactivate setting'
         #                ]
@@ -78,4 +78,4 @@ class Attempt(models.Model):
 
     class Meta:
         verbose_name = 'Попытка рассылки'
-        verbose_name_plural = 'Попытки рассылки'
+        verbose_name_plural = 'Попытки рассылок'

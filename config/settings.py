@@ -40,7 +40,9 @@ INSTALLED_APPS = [
 
     'mailing.apps.MailingConfig',
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
+    'django_crontab',
+    # 'mailing.management.commands.send_command',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -146,7 +148,15 @@ EMAIL_HOST_PASSWORD = os.environ.get('YANDEX_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
+CRONJOBS = [
+    ('* * * * *', 'mailing.management.commands.send_command.Command.handle()', ['Раз в день']), # for tests
+    ('* * * * *', 'mailing.cron.email_test', ['Раз в день']), # for tests
+    ('0 0 * * *', 'mailing.cron.email_test', ['Раз в день']),
+    ('0 0 * * 0', 'mailing.cron.email_test', ['Раз в неделю']),
+    ('0 0 1 * *', 'mailing.cron.email_test', ['Раз в месяц']),
+]
+
 # AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = '/'
+
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'

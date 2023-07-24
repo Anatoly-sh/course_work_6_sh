@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView, UpdateView
 
 from mailing.form import ClientForm, MailSettingForm
 from mailing.models import Client, MailSetting, Attempt
@@ -48,6 +48,16 @@ class MailSettingCreate(CreateView):
     #     instance = form.save()
     #     instance.author = self.request.user  # запись в таблицу Client автора записи
     #     return super().form_valid(form)
+
+
+class MailSettingUpdate(UpdateView):
+    model = MailSetting
+    form_class = MailSettingForm
+
+    # def get_success_url(self):
+    #     return self.object.get_absolute_url()
+    def get_success_url(self, *args, **kwargs):
+        return reverse('mailing:mail-setting-detail', args=[self.get_object().pk])
 
 
 class MailSettingDelete(DeleteView):

@@ -17,11 +17,10 @@
             <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'mailing:mail-setting-list' %}">Рассылки</a>
-        </li>
+            <a class="nav-link" href="{% url 'mailing:mail-setting-list' %}">Список рассылок</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled">Резерв</a>
+            <a class="nav-link" href="{% url 'mailing:attempt-list' %}">Отчет о рассылках</a>
         </li>
         <p>Вы вошли как: <i>---</i></p>
     </ul>

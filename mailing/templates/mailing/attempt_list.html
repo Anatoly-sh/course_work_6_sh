@@ -1,0 +1,32 @@
+{% extends "mailing/base.html" %}
+
+{% block content %}
+    <h2>Отчет о рассылках</h2>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ПОПЫТКА</th>
+            <th scope="col">ДАТА ПОПЫТКИ</th>
+            <th scope="col">СТАТУС ПОПЫТКИ</th>
+            <th scope="col">ОТВЕТ СЕРВЕРА</th>
+            {#            <th scope="col">....</th>#}
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in object_list %}
+            <tr>
+                <td>{{ object.attempt }}</td>
+                <td>{{ object.attempt_time }}</td>
+                <td>{{ object.attempt_status }}</td>
+                <td>{{ object.server_answer }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="card-footer">
+        <a href="{% url 'mailing:main' %}" class="btn btn-primary"><< На главную</a>
+    </div>
+{% endblock %}

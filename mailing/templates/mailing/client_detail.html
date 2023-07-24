@@ -8,6 +8,7 @@
         <p class="col-md-8 fs-5">Комментарий: {{ object.comment }}</p>
         <div class="card-footer">
             <a href="{% url 'mailing:clients' %}" class="btn btn-primary"><< Назад</a>
+            <a href="{% url 'mailing:client_update' object.pk %}" class="btn btn-warning">Изменить клиента</a>
             <a href="{% url 'mailing:client_delete' object.pk %}" class="btn btn-danger">Удалить клиента</a>
             {#            {% url 'mailing:client_delete' object.pk %}#}
         </div>

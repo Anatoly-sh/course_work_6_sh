@@ -25,6 +25,14 @@ class ClientCreate(CreateView):
     #     return super().form_valid(form)
 
 
+class ClientUpdate(UpdateView):
+    model = Client
+    form_class = ClientForm
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse('mailing:client_detail', args=[self.get_object().pk])
+
+
 class ClientDelete(DeleteView):
     model = Client
     success_url = reverse_lazy('mailing:clients')
@@ -54,8 +62,6 @@ class MailSettingUpdate(UpdateView):
     model = MailSetting
     form_class = MailSettingForm
 
-    # def get_success_url(self):
-    #     return self.object.get_absolute_url()
     def get_success_url(self, *args, **kwargs):
         return reverse('mailing:mail-setting-detail', args=[self.get_object().pk])
 

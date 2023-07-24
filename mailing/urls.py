@@ -3,7 +3,7 @@ from django.urls import path, include
 
 from mailing.apps import MailingConfig
 from mailing.views import ClientList, ClientCreate, MainPage, ClientDetail, ClientDelete, MailSettingList, \
-    MailSettingCreate, MailSettingDetail, MailSettingDelete, AttemptView, MailSettingUpdate
+    MailSettingCreate, MailSettingDetail, MailSettingDelete, AttemptView, MailSettingUpdate, ClientUpdate
 
 app_name = MailingConfig.name
 
@@ -13,11 +13,12 @@ urlpatterns = [
     path('clients/', ClientList.as_view(), name='clients'),
     path('client_create/', ClientCreate.as_view(), name='client_create'),
     path('client_detail/<int:pk>/', ClientDetail.as_view(), name='client_detail'),
+    path('client_update/<int:pk>/', ClientUpdate.as_view(), name='client_update'),
     path('client_delete/<int:pk>/', ClientDelete.as_view(), name='client_delete'),
     path('mailsetting_list/', MailSettingList.as_view(), name='mail-setting-list'),
     path('mailsetting_create/', MailSettingCreate.as_view(), name='mail-setting-create'),
-    path('mailsetting_update/<int:pk>/', MailSettingUpdate.as_view(), name='mail-setting-update'),
     path('mailsetting_detail/<int:pk>/', MailSettingDetail.as_view(), name='mail-setting-detail'),
+    path('mailsetting_update/<int:pk>/', MailSettingUpdate.as_view(), name='mail-setting-update'),
     path('mailsetting_delete/<int:pk>/', MailSettingDelete.as_view(), name='mail-setting-delete'),
     path('attempt_list/', AttemptView.as_view(), name='attempt-list'),
 ]

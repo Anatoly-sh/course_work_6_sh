@@ -13,11 +13,25 @@ def mailing_subject_select_for_crontab():
     return tmp_mailing.filter()
 
 
-def mailing_subject_select_for_command_handle():
+def mailing_subject_select_for_command_handle(send_auto):
     """
-    Из всех рассылок БД выбор активных & запущенных (launched).
+    Из всех рассылок БД выбор активных & запущенных (launched). После - фильтрация авторассылок.
     """
+    print(send_auto)
+    # ------------------------------------------------------
+    with open("scheduled_job_handle.log", "a") as f:  # append mode
+        f.write(str(send_auto))
+        f.write(' - это handle\n')
+    # ------------------------------------------------------
+
+
     activ_mailing = MailSetting.objects.all().filter(is_active=True, status='launched')
+    if send_auto == 'Раз в день':
+        activ_mailing.filter(mailing_period='daily') # daily
+    elif send_auto == 'Раз в неделю':
+        activ_mailing.filter(mailing_period='Раз в неделю')  # weekly
+    elif send_auto == 'Раз в месяц':
+        activ_mailing.filter(mailing_period='Раз в месяц')  # monthly
     return activ_mailing
 
 
@@ -83,19 +97,30 @@ def mailing_subject_renew():
         mailing.save()
 
 
+def hhh(args):
+    if not args:
+        print("List is empty")
+    # ------------------------------------------------------
+    with open("scheduled_job_handle.log", "a") as f:  # append mode
+        # f.write(args)
+        f.write(' - это handle\n')
+    # ------------------------------------------------------
+
+
 class Command(BaseCommand):
     help = 'Команда инициирует разовую рассылку по всем заданным параметрам объекта MailSetting'
 
     @staticmethod
     def handle(*args, **options):
-        # ------------------------------------------------------
-        with open("scheduled_job_handle.log", "a") as f:  # append mode
-            # f.write(*args)
-            f.write(' - это handle\n')
+        if not args:                    # не пришел аргумент из авторассылки?
+            send_auto = None
+        else:
+            send_auto = args[0]         # пришел аргумент из авторассылки, передаем в параметре
+        # hhh(send_auto)
         # ------------------------------------------------------
 
-        mailing_subject_renew()  # обновление флагов рассылок в БД
-        active_mailing = mailing_subject_select_for_command_handle()    # выбор действующих рассылок
+        mailing_subject_renew()                                         # обновление флагов рассылок в БД
+        active_mailing = mailing_subject_select_for_command_handle(send_auto)    # выбор действующих рассылок
                                                                         # (флаги is_active и launched)
         mailing_and_statistic(active_mailing)
 # ------------------------------------------------------

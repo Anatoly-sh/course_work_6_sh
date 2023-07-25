@@ -149,11 +149,10 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
 CRONJOBS = [
-    ('* * * * *', 'mailing.management.commands.send_command.Command.handle()', ['Раз в день']), # for tests
-    ('* * * * *', 'mailing.cron.email_test', ['Раз в день']), # for tests
-    ('0 0 * * *', 'mailing.cron.email_test', ['Раз в день']),
-    ('0 0 * * 0', 'mailing.cron.email_test', ['Раз в неделю']),
-    ('0 0 1 * *', 'mailing.cron.email_test', ['Раз в месяц']),
+    ('* * * * *', 'mailing.services.send_auto', ['Раз в день']), # for tests
+    # ('0 0 * * *', 'mailing.services.send_auto', ['Раз в день']),
+    # ('0 0 * * 0', 'mailing.services.send_auto', ['Раз в неделю']),
+    # ('0 0 1 * *', 'mailing.services.send_auto', ['Раз в месяц']),
 ]
 
 # AUTH_USER_MODEL = 'users.User'

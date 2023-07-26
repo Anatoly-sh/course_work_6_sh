@@ -74,9 +74,6 @@ class MailSettingDelete(DeleteView):
 
 class AttemptView(ListView):
     model = Attempt
-    extra_context = {
-        'object_list': Attempt.objects.all()
-    }
 
 
 class MainPage(TemplateView):

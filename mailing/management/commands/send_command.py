@@ -8,51 +8,52 @@ from django.core.management import BaseCommand
 from mailing.models import *
 
 
-def mailing_subject_select_for_crontab():
-    tmp_mailing = mailing_subject_select_for_command_handle()
-    return tmp_mailing.filter()
+# def mailing_subject_select_for_crontab():
+#     tmp_mailing = mailing_subject_select_for_command_handle()
+#     return tmp_mailing.filter()
 
 
-def mailing_subject_select_for_command_handle(send_auto):
+def mailing_subject_select_for_command_handle(freq):
     """
     Из всех рассылок БД выбор активных & запущенных (launched). После - фильтрация авторассылок.
     """
-    print(send_auto)
+    # print('это mailing_subject_select_for_command_handle')
     # ------------------------------------------------------
     with open("scheduled_job_handle.log", "a") as f:  # append mode
-        f.write(str(send_auto))
+        f.write(str(freq))
         f.write(' - это handle\n')
     # ------------------------------------------------------
 
-
     activ_mailing = MailSetting.objects.all().filter(is_active=True, status='launched')
-    if send_auto == 'Раз в день':
-        activ_mailing.filter(mailing_period='daily') # daily
-    elif send_auto == 'Раз в неделю':
+    if freq == 'Раз в день':
+        activ_mailing.filter(mailing_period='daily')  # daily
+    elif freq == 'Раз в неделю':
         activ_mailing.filter(mailing_period='Раз в неделю')  # weekly
-    elif send_auto == 'Раз в месяц':
+    elif freq == 'Раз в месяц':
         activ_mailing.filter(mailing_period='Раз в месяц')  # monthly
     return activ_mailing
 
 
-def mailing_and_statistic(mailing_queryset):
+def mailing_and_statistic(mailing_queryset):  # получен queryset рассылок
     global letter_subject, letter_body
-    pk_list = []                            # получение перечня ID для отправки каждого из писем mailing_queryset
+    pk_list = []  # получение перечня pk каждой рассылки из mailing_queryset
     for m_q in mailing_queryset:
         pk_list.append(m_q.pk)
-    for pk in pk_list:                      # перебор писем для отправки через ID
+
+    for pk in pk_list:          # перебор рассылок через pk, определение параметров и отправка
         mailing = mailing_queryset.get(pk=pk)
-        client_list = []                    # получение перечня клиентов для отправки каждого из писем mailing_queryset
+
+        client_list = []        # получение перечня клиентов для отправки
+        # каждой рассылки из mailing_queryset
         for cl in mailing.client.all():
             client_list.append(cl.email_contact)
-        # print(client_list)
-        # print(pk)
-        message_obj = Message.objects.filter(letter_subject=mailing.message)
-        for mess in message_obj:                # выбор предмета рассылки для каждой рассылки
-            letter_subject = mess.letter_subject
-            letter_body = mess.letter_body
-        # print(letter_subject)
-        # print(letter_body)
+        print(client_list)
+        print(pk)
+
+        message_obj = Message.objects.filter(letter_subject=mailing.message)    # queryset из 1 объекта
+        letter_subject = message_obj[0].letter_subject          # тема письма
+        letter_body = message_obj[0].letter_body                # тело письма
+
         status_list = []
         try:
             send_mail(
@@ -75,11 +76,11 @@ def mailing_and_statistic(mailing_queryset):
 
         Attempt.objects.bulk_create(status_list)
 
-
         # print(letter_subject)
         # print(letter_body)
         # print(settings.EMAIL_HOST_USER)
         # print([*client_list])
+
 
 def mailing_subject_renew():
     """
@@ -102,8 +103,8 @@ def hhh(args):
         print("List is empty")
     # ------------------------------------------------------
     with open("scheduled_job_handle.log", "a") as f:  # append mode
-        # f.write(args)
-        f.write(' - это handle\n')
+        f.write(str(args))
+        f.write(' - это handle2\n')
     # ------------------------------------------------------
 
 
@@ -112,17 +113,15 @@ class Command(BaseCommand):
 
     @staticmethod
     def handle(*args, **options):
-        if not args:                    # не пришел аргумент из авторассылки?
+        if not args:                # не пришел аргумент из авторассылки?
             send_auto = None
         else:
-            send_auto = args[0]         # пришел аргумент из авторассылки, передаем в параметре
-        # hhh(send_auto)
+            send_auto = args[0]     # пришел аргумент из авторассылки, передаем в параметре
+        hhh(send_auto)
         # ------------------------------------------------------
 
-        mailing_subject_renew()                                         # обновление флагов рассылок в БД
-        active_mailing = mailing_subject_select_for_command_handle(send_auto)    # выбор действующих рассылок
-                                                                        # (флаги is_active и launched)
-        mailing_and_statistic(active_mailing)
+        mailing_subject_renew()  # обновление флагов рассылок в БД
+        active_mailings = mailing_subject_select_for_command_handle(send_auto)  # выбор действующих рассылок
+        # (флаги is_active и launched)+send_auto
+        mailing_and_statistic(active_mailings)
 # ------------------------------------------------------
-
-

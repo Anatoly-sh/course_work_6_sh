@@ -17,13 +17,6 @@ def mailing_subject_select_for_command_handle(freq):
     """
     Из всех рассылок БД выбор активных & запущенных (launched). После - фильтрация авторассылок.
     """
-    # print('это mailing_subject_select_for_command_handle')
-    # ------------------------------------------------------
-    with open("scheduled_job_handle.log", "a") as f:  # append mode
-        f.write(str(freq))
-        f.write(' - это handle\n')
-    # ------------------------------------------------------
-
     activ_mailing = MailSetting.objects.all().filter(is_active=True, status='launched')
     if freq == 'Раз в день':
         activ_mailing.filter(mailing_period='daily')  # daily
@@ -31,6 +24,11 @@ def mailing_subject_select_for_command_handle(freq):
         activ_mailing.filter(mailing_period='Раз в неделю')  # weekly
     elif freq == 'Раз в месяц':
         activ_mailing.filter(mailing_period='Раз в месяц')  # monthly
+    # ------------------------------------------------------
+    with open("scheduled_job_handle.log", "a") as f:  # append mode
+        f.writelines(f'{str(len(activ_mailing))}\n{str(freq)}\n{str(activ_mailing)}\n'
+                     f'- это mailing_subject_select_for_command_handle')
+    # ------------------------------------------------------
     return activ_mailing
 
 
@@ -86,16 +84,15 @@ def mailing_subject_renew():
     """
     Изменение флагов перечня рассылок в соответствии с текущей датой.
     """
+    datetime_now = datetime.now().timestamp()
     for mailing in MailSetting.objects.all().filter(is_active=True):  # перебор рассылок
-
-        if datetime.now().timestamp() <= mailing.mailing_start.timestamp():
+        if datetime_now <= mailing.mailing_start.timestamp():
             mailing.status = 'created'
         else:
-            if datetime.now().timestamp() <= mailing.mailing_stop.timestamp():
+            if datetime_now <= mailing.mailing_stop.timestamp():
                 mailing.status = 'launched'
             else:
                 mailing.status = 'completed'
-        mailing.save()
 
 
 def hhh(args):
@@ -117,7 +114,7 @@ class Command(BaseCommand):
             send_auto = None
         else:
             send_auto = args[0]     # пришел аргумент из авторассылки, передаем в параметре
-        hhh(send_auto)
+        # hhh(send_auto)
         # ------------------------------------------------------
 
         mailing_subject_renew()  # обновление флагов рассылок в БД

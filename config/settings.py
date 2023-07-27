@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'django_crontab',
+    'users.apps.UsersConfig',
     # 'mailing.management.commands.send_command',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -115,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'europe/moscow'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -155,7 +156,7 @@ CRONJOBS = [
     # ('0 0 1 * *', 'mailing.services.send_auto', ['Раз в месяц']),
 ]
 
-# AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'
 
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'

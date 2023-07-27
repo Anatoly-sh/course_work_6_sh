@@ -11,19 +11,25 @@ def send_auto(*args):
     auto_attr = args[0]
     with open("scheduled_job.log", "a") as f:  # append mode
         f.write(str(auto_attr))
-        f.write(' - сюда пишет send_auto\n')
+        f.write(' - сюда пишет send_auto1\n')
     # ------------------------------------------------------
     # Command.handle(auto_attr)
 
 
     # ------------------------------------------------------
     mailing_subject_renew()               # обновление флагов рассылок в БД
-    # active_mailings = mailing_subject_select_for_command_handle(auto_attr)  # выбор действующих рассылок
+    # ------------------------------------------------------
+    auto_attr = args[0]
+    with open("scheduled_job.log", "a") as f:  # append mode
+        f.write(str(auto_attr))
+        f.write(' - сюда пишет send_auto2\n')
+    # ------------------------------------------------------
+    active_mailings = mailing_subject_select_for_command_handle(auto_attr)  # выбор действующих рассылок
     #(флаги is_active и launched)+send_auto
     with open("scheduled_job.log", "a") as f:  # append mode
         # f.write(str(len(active_mailings)))
-        f.write(' - сюда пишет send_auto\n')
-    # mailing_and_statistic(active_mailings)
+        f.write(' - сюда пишет send_auto3\n')
+    mailing_and_statistic(active_mailings)
     # ------------------------------------------------------
 
 

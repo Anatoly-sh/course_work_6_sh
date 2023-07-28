@@ -138,9 +138,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Redirect to home URL after login (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
@@ -150,7 +147,8 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
 CRONJOBS = [
-    ('* * * * *', 'mailing.services.send_auto', ['Раз в день']), # for tests
+    ('* * * * *', 'mailing.services.send_auto'),  # for tests
+    # ('* * * * *', 'mailing.services.send_auto', ['Раз в день']), # for tests
     # ('0 0 * * *', 'mailing.services.send_auto', ['Раз в день']),
     # ('0 0 * * 0', 'mailing.services.send_auto', ['Раз в неделю']),
     # ('0 0 1 * *', 'mailing.services.send_auto', ['Раз в месяц']),
@@ -158,5 +156,7 @@ CRONJOBS = [
 
 AUTH_USER_MODEL = 'users.User'
 
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import psycopg2
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core.management import BaseCommand
@@ -38,19 +39,19 @@ def mailing_and_statistic(mailing_queryset):  # получен queryset расс
     for m_q in mailing_queryset:
         pk_list.append(m_q.pk)
 
-    for pk in pk_list:          # перебор рассылок через pk, определение параметров и отправка
+    for pk in pk_list:  # перебор рассылок через pk, определение параметров и отправка
         mailing = mailing_queryset.get(pk=pk)
 
-        client_list = []        # получение перечня клиентов для отправки
+        client_list = []  # получение перечня клиентов для отправки
         # каждой рассылки из mailing_queryset
         for cl in mailing.client.all():
             client_list.append(cl.email_contact)
         print(client_list)
         print(pk)
 
-        message_obj = Message.objects.filter(letter_subject=mailing.message)    # queryset из 1 объекта
-        letter_subject = message_obj[0].letter_subject          # тема письма
-        letter_body = message_obj[0].letter_body                # тело письма
+        message_obj = Message.objects.filter(letter_subject=mailing.message)  # queryset из 1 объекта
+        letter_subject = message_obj[0].letter_subject  # тема письма
+        letter_body = message_obj[0].letter_body  # тело письма
 
         status_list = []
         try:
@@ -85,14 +86,50 @@ def mailing_subject_renew():
     Изменение флагов перечня рассылок в соответствии с текущей датой.
     """
     datetime_now = datetime.now().timestamp()
+
     for mailing in MailSetting.objects.all().filter(is_active=True):  # перебор рассылок
+        # ------------------------------------------------------
+        with open("scheduled_job.log", "a") as f:  # append mode
+            f.write(' - сюда пишет send_auto2\n')
+        # ------------------------------------------------------
         if datetime_now <= mailing.mailing_start.timestamp():
             mailing.status = 'created'
         else:
             if datetime_now <= mailing.mailing_stop.timestamp():
                 mailing.status = 'launched'
+                print('привет')
             else:
                 mailing.status = 'completed'
+        mailing.save()
+
+
+def db_test():
+    """Проверка доступности БД"""
+    connection = None
+    try:
+        # Default host is 'localhost' or '127.0.0.1'
+        # And default port is '54323'.
+        connection = psycopg2.connect("user='postgres' host='localhost' password='12345' port='5433'")
+        # ------------------------------------------------------
+        with open("scheduled_job.log", "a") as f:  # append mode
+            f.write(f'{datetime.now()}\n')
+            f.write('Database connected.\n')
+        # ------------------------------------------------------
+    except:
+        # ------------------------------------------------------
+        with open("scheduled_job.log", "a") as f:  # append mode
+            f.write(f'{datetime.now()}\n')
+            f.write('Database not connected.\n')
+        # ------------------------------------------------------
+
+    if connection is not None:
+        connection.autocommit = True
+        cur = connection.cursor()
+        cur.execute("SELECT datname FROM pg_database;")
+        list_database = cur.fetchall()
+        with open("scheduled_job.log", "a") as f:
+            for db in list_database:
+                f.write(f'{str(db)} \n')
 
 
 def hhh(args):
@@ -110,13 +147,12 @@ class Command(BaseCommand):
 
     @staticmethod
     def handle(*args, **options):
-        if not args:                # не пришел аргумент из авторассылки?
+        if not args:  # не пришел аргумент из авторассылки?
             send_auto = None
         else:
-            send_auto = args[0]     # пришел аргумент из авторассылки, передаем в параметре
+            send_auto = args[0]  # пришел аргумент из авторассылки, передаем в параметре
         # hhh(send_auto)
         # ------------------------------------------------------
-
         mailing_subject_renew()  # обновление флагов рассылок в БД
         active_mailings = mailing_subject_select_for_command_handle(send_auto)  # выбор действующих рассылок
         # (флаги is_active и launched)+send_auto

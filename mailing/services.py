@@ -1,20 +1,20 @@
 from django.core.mail import send_mail
 
 from mailing.management.commands.send_command import Command, mailing_subject_renew, \
-    mailing_subject_select_for_command_handle, mailing_and_statistic
+    mailing_subject_select_for_command_handle, mailing_and_statistic, db_test
 # from config import settings
 from mailing.models import *
 
 
 def send_auto(*args):
     # ------------------------------------------------------
-    auto_attr = args[0]
+    # auto_attr = args[0]
     with open("scheduled_job.log", "a") as f:  # append mode
-        f.write(str(auto_attr))
+        # f.write(str(auto_attr))
         f.write(' - сюда пишет send_auto1\n')
     # ------------------------------------------------------
     # Command.handle(auto_attr)
-
+    db_test()
 
     # ------------------------------------------------------
     mailing_subject_renew()               # обновление флагов рассылок в БД

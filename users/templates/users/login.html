@@ -1,0 +1,22 @@
+{% extends 'mailing/base.html' %}
+
+{% block content %}
+    <div class="col-3"></div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header">Пользователь</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-success mt-3" type="submit">Войти</button>
+                    <a href="{% url 'mailing:mail-setting-list' %}" class="btn btn-secondary mt-3">Отменить</a>
+                </form>
+            </div>
+            <div class="card-footer">
+                <a class="text-muted" href="">Забыли пароль?</a>
+                <a class="text-primary" href="">>>Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

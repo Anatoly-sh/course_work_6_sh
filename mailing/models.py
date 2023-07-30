@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 NULLABLE = {'blank': True, 'null': True}
 
 
@@ -7,7 +9,7 @@ class Client(models.Model):
     email_contact = models.EmailField(max_length=150, unique=True, verbose_name='Адрес клиента')
     full_name = models.CharField(max_length=150, verbose_name='Полное имя', **NULLABLE)
     comment = models.TextField(max_length=2000, verbose_name='Комментарии', **NULLABLE)
-    # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Кем создан', **NULLABLE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Кем создан', **NULLABLE)
 
     def __str__(self):
         return self.email_contact
@@ -46,7 +48,7 @@ class MailSetting(models.Model):
     mailing_stop = models.DateTimeField(verbose_name='Конец рассылки', **NULLABLE)
     mailing_period = models.CharField(max_length=10, choices=choices_period, verbose_name='Периодичность', **NULLABLE)
     status = models.CharField(max_length=10, choices=mailing_status, verbose_name='Статус рассылки', **NULLABLE)
-    # author = models.ForeignKey('User', on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор', **NULLABLE)
     client = models.ManyToManyField(Client, related_name='clients', verbose_name='Клиент')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение', **NULLABLE)
     launched_date = models.DateField(verbose_name='Дата отправки рассылки', **NULLABLE)

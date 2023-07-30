@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'django_crontab',
     'users.apps.UsersConfig',
-    # 'mailing.management.commands.send_command',
+    'django_email_verification',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -138,6 +138,21 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+def verified_callback(user):
+    user.is_active = True
+
+
+EMAIL_VERIFIED_CALLBACK = verified_callback
+EMAIL_FROM_ADDRESS = 'anatoly.shapovalov1957@yandex.ru'
+EMAIL_MAIL_SUBJECT = 'Confirm your email'
+EMAIL_MAIL_HTML = 'users/mail_body.html'
+EMAIL_MAIL_PLAIN = 'users/mail_body.txt'
+EMAIL_MAIL_TOKEN_LIFE = 60 * 60
+EMAIL_MAIL_PAGE_TEMPLATE = 'users/confirm_template.html'
+EMAIL_PAGE_DOMAIN = 'http://127.0.0.1:8000/'
+# EMAIL_MULTI_USER = True  # optional (defaults to False)
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
@@ -145,6 +160,8 @@ EMAIL_HOST_USER = 'anatoly.shapovalov1957@yandex.ru'
 EMAIL_HOST_PASSWORD = os.environ.get('YANDEX_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'anatoly.shapovalov1957@yandex.ru'
+SERVER_EMAIL = 'anatoly.shapovalov1957@yandex.ru'
 
 CRONJOBS = [
     ('* * * * *', 'mailing.services.send_auto'),  # for tests

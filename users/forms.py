@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 from users.models import User
 
@@ -15,3 +15,10 @@ class CastomUserForm(UserChangeForm):
 
         self.fields['password'].widget = forms.HiddenInput()
 
+
+class CastomUserRegisterForm(UserCreationForm):
+    """Переопределяем из-за поля email (вместо username)"""
+
+    class Meta:
+        model = User
+        fields = ('email', 'password1', 'password2')

@@ -8,23 +8,6 @@
             <a class="nav-link" href="#">Блоги</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Регистрация</a>
-        </li>
-
-        {% if user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:logout' %}">Выход</a>
-        </li>
-        {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:login' %}">Вход</a>
-        </li>
-        {% endif %}
-
-        <li class="nav-item">
             <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты</a>
         </li>
         <li class="nav-item">
@@ -33,6 +16,21 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'mailing:attempt-list' %}">Отчет о рассылках</a>
         </li>
-        <p>Вы вошли как: <i>---</i></p>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:register' %}">Регистрация</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:logout' %}">Выход</a>
+        </li>
+        <p>Вы вошли как: <i>{{ user.email }}</i></p>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:login' %}">Вход</a>
+        </li>
+        {% endif %}
     </ul>
 </nav>

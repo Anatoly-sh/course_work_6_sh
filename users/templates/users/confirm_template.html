@@ -1,0 +1,16 @@
+{#{% extends 'mailing/base.html' %}#}
+
+{% block title %}
+    <title>Подтверждение электронной почты</title>
+{% endblock title %}
+
+{% block content %}
+    {% if success %}
+        {{ user.email }}, ваша учетная запись подтверждена!
+        <a href="{% url 'mailing:main' %}" class="btn btn-primary"><< На главную</a>
+    {% else %}
+        Ошибка, неверный token!
+        <a href="{% url 'users:register' %}" class="btn btn-primary"><< Регистрация</a>
+        <a href="{% url 'mailing:main' %}" class="btn btn-primary"><< На главную</a>
+    {% endif %}
+{% endblock content %}

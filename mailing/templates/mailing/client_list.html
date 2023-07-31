@@ -12,6 +12,7 @@
             <th scope="col">Электронная почта</th>
             <th scope="col">Полное имя</th>
             <th scope="col">Комментарии</th>
+            <th scope="col">Кем создан</th>
             <th scope="col"><a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Новый клиент</a></th>
         </tr>
         </thead>
@@ -25,6 +26,7 @@
                     {% if object.comment|length > 30 %}...
                     {% endif %}
                 </td>
+                <td>{{ object.author }}</td>
                 <td><a class="btn btn-secondary" href="{% url 'mailing:client_detail' object.pk %}" role="button">Подробнее
                     &raquo;</a></td>
                 {#            {% url 'mailing:client_detail' object.pk %}#}

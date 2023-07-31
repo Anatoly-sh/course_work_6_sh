@@ -41,7 +41,7 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         register_user = form.save()
-        # register_user['is_active'] = False
+        register_user.is_active = False
         returnVal = super(RegisterView, self).form_valid(form)
         send_email(register_user)
         return returnVal

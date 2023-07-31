@@ -44,7 +44,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name='почта')
-    is_active = models.BooleanField(default=False, verbose_name='активный статус')
+    is_active = models.BooleanField(default=True, verbose_name='активный статус')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

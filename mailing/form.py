@@ -15,8 +15,7 @@ class ClientForm(forms.ModelForm):
 
     class Meta:
         model = Client
-        fields = '__all__'
-        # exclude = ('author',)
+        exclude = ('author',)
 
 
 class MailSettingForm(forms.ModelForm):
@@ -28,5 +27,4 @@ class MailSettingForm(forms.ModelForm):
 
     class Meta:
         model = MailSetting
-        # fields = '__all__'
-        exclude = ('launched_date',)
+        exclude = ('launched_date', 'author', 'status',)

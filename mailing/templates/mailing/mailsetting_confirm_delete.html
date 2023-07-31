@@ -14,8 +14,6 @@
         <p class="col-md-8 fs-5">Активация рассылки: {{ object.is_active }}</p>
         <div class="card-footer">
             <a href="{% url 'mailing:mail-setting-detail' object.pk %}" class="btn btn-primary"><< Назад</a>
-            <a href="{% url 'mailing:mail-setting-delete' object.pk %}" class="btn btn-danger">Удалить рассылку</a>
-            {#            {% url 'mailing:client_delete' object.pk %}#}
         </div>
     </div>
     <div class="col">

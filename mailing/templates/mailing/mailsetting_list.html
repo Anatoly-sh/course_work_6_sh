@@ -14,6 +14,7 @@
             <th scope="col">Периодичность</th>
             <th scope="col">Статус</th>
             <th scope="col">Сообщение</th>
+            <th scope="col">Кем создана</th>
             <th scope="col"><a href="{% url 'mailing:mail-setting-create' %}" class="btn btn-primary">Новая рассылка</a></th>
         </tr>
         </thead>
@@ -24,8 +25,9 @@
                 <td>{{ object.mailing_start }}</td>
                 <td>{{ object.mailing_stop }}</td>
                 <td>{{ object.mailing_period }}</td>
-                <td>{{ object.status }}
-                <td>{{ object.message }}
+                <td>{{ object.status }}</td>
+                <td>{{ object.message }}</td>
+                <td>{{ object.author }}</td>
                 <td><a class="btn btn-secondary" href="{% url 'mailing:mail-setting-detail' object.pk %}" role="button">Подробнее
                     &raquo;</a></td>
                 {#            {% url 'mailing:client_detail' object.pk %}#}

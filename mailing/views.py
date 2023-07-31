@@ -10,9 +10,9 @@ class ClientList(ListView):
     model = Client
 
     def get_queryset(self):
-        # queryset = super().get_queryset()
-        # if self.request.user.has_perm('main.view_client'):
-        #     return queryset
+        queryset = super().get_queryset()
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return queryset
         return Client.objects.filter(author=self.request.user)
 
 
@@ -49,9 +49,9 @@ class MailSettingList(ListView):
     model = MailSetting
 
     def get_queryset(self):
-        # queryset = super().get_queryset()
-        # if self.request.user.has_perm('main.view_client'):
-        #     return queryset
+        queryset = super().get_queryset()
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return queryset
         return MailSetting.objects.filter(author=self.request.user)
 
 

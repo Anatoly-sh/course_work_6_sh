@@ -9,6 +9,12 @@ from mailing.models import Client, MailSetting, Attempt
 class ClientList(ListView):
     model = Client
 
+    def get_queryset(self):
+        # queryset = super().get_queryset()
+        # if self.request.user.has_perm('main.view_client'):
+        #     return queryset
+        return Client.objects.filter(author=self.request.user)
+
 
 class ClientDetail(DetailView):
     model = Client
@@ -41,6 +47,13 @@ class ClientDelete(DeleteView):
 
 class MailSettingList(ListView):
     model = MailSetting
+
+    def get_queryset(self):
+        # queryset = super().get_queryset()
+        # if self.request.user.has_perm('main.view_client'):
+        #     return queryset
+        return MailSetting.objects.filter(author=self.request.user)
+
 
 
 class MailSettingDetail(DetailView):

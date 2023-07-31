@@ -7,30 +7,45 @@
         <li class="nav-item">
             <a class="nav-link" href="#">Блоги</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'mailing:mail-setting-list' %}">Список рассылок</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'mailing:attempt-list' %}">Отчет о рассылках</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:register' %}">Регистрация</a>
-        </li>
-        {% if user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:profile' %}">Профиль пользователя</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:logout' %}">Выход</a>
-        </li>
-        <p>Вы вошли как: <i>{{ user.email }}</i></p>
+        {% if not user.is_authenticated %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:register' %}">Регистрация</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:login' %}">Вход</a>
+            </li>
         {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:login' %}">Вход</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mailing:mail-setting-list' %}">Список рассылок</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'mailing:attempt-list' %}">Отчет о рассылках</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:profile' %}">Профиль пользователя</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:logout' %}">Выход</a>
+            </li>
+            <p>Вы вошли как: <i>{{ user.email }}</i></p>
+        {% endif %}
+
+        {% if user.is_superuser %}
+            <p style="color:#FF0000"><strong>Superuser</strong></p>
+        {% else %}
+            {% if user.is_staff %}
+                <p style="color:#FF0000"><strong>Менеджер</strong></p>
+            {% endif %}
         {% endif %}
     </ul>
 </nav>
+
+{#            {% if user.is_superuser %}#}
+{#                <strong><a style="color:#FF0000" >Superuser</a>#}
+{#            {% else %}#}
+{#                {% if user.is_staff %}#}
+{#                <strong><a style="color:#FF0000">Менеджер</a>#}
+{#            {% endif %}#}

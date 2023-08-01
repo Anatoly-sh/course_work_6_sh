@@ -6,7 +6,7 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class Client(models.Model):
-    email_contact = models.EmailField(max_length=150, unique=True, verbose_name='Адрес клиента')
+    email_contact = models.EmailField(max_length=150, verbose_name='Адрес клиента')
     full_name = models.CharField(max_length=150, verbose_name='Полное имя', **NULLABLE)
     comment = models.TextField(max_length=2000, verbose_name='Комментарии', **NULLABLE)
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Кем создан', **NULLABLE)
@@ -60,9 +60,12 @@ class MailSetting(models.Model):
     class Meta:
         verbose_name = 'Рассылка: параметры'
         verbose_name_plural = 'Рассылки: параметры'
-        # permissions = ['can_deactivate_setting',
-        #                'Can deactivate setting'
-        #                ]
+        permissions = [
+            (
+                'can_deactivate_mailing',
+                'Blocing mailing'
+            ),
+        ]
 
 
 class Attempt(models.Model):

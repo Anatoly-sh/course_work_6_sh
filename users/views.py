@@ -1,8 +1,9 @@
 from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin, LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, CreateView
+from django.views.generic import UpdateView, CreateView, ListView
 from django_email_verification import send_email
 
 from config import settings
@@ -45,3 +46,13 @@ class RegisterView(CreateView):
         returnVal = super(RegisterView, self).form_valid(form)
         send_email(register_user)
         return returnVal
+
+
+class UserListView(LoginRequiredMixin, ListView):
+    model = User
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.has_perm('users.view_user'):
+            return queryset
+        return queryset.filter(email=self.request.user)     # выводит только себя

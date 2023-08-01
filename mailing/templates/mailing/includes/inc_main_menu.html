@@ -17,7 +17,10 @@
             </li>
         {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты</a>
+                <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты сервиса</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:users-list' %}">Пользователи сервиса</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'mailing:mail-setting-list' %}">Список рассылок</a>
@@ -25,7 +28,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'mailing:attempt-list' %}">Отчет о рассылках</a>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:profile' %}">Профиль пользователя</a>
+                <a class="nav-link" href="{% url 'users:profile' %}">Мой профиль</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'users:logout' %}">Выход</a>
@@ -35,17 +38,10 @@
 
         {% if user.is_superuser %}
             <p style="color:#FF0000"><strong>Superuser</strong></p>
-        {% else %}
-            {% if user.is_staff %}
-                <p style="color:#FF0000"><strong>Менеджер</strong></p>
-            {% endif %}
+{#        {% else %}#}
+{#            {% if user.is_staff %}#}
+{#                <p style="color:#FF0000"><strong>Staff</strong></p>#}
+{#            {% endif %}#}
         {% endif %}
     </ul>
 </nav>
-
-{#            {% if user.is_superuser %}#}
-{#                <strong><a style="color:#FF0000" >Superuser</a>#}
-{#            {% else %}#}
-{#                {% if user.is_staff %}#}
-{#                <strong><a style="color:#FF0000">Менеджер</a>#}
-{#            {% endif %}#}

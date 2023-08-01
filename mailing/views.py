@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView, UpdateView
@@ -6,21 +7,27 @@ from mailing.form import ClientForm, MailSettingForm
 from mailing.models import Client, MailSetting, Attempt
 
 
-class ClientList(ListView):
+class ClientList(LoginRequiredMixin, ListView):
     model = Client
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_staff or self.request.user.is_superuser:
+        if self.request.user.has_perm('mailing.view_client'):
             return queryset
         return Client.objects.filter(author=self.request.user)
 
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if self.request.user.is_staff or self.request.user.is_superuser:
+    #         return queryset
+    #     return Client.objects.filter(author=self.request.user)
 
-class ClientDetail(DetailView):
+
+class ClientDetail(LoginRequiredMixin, DetailView):
     model = Client
 
 
-class ClientCreate(CreateView):
+class ClientCreate(LoginRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing:clients')
@@ -31,39 +38,64 @@ class ClientCreate(CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdate(UpdateView):
+class ClientUpdate(UserPassesTestMixin, UpdateView):
     model = Client
     form_class = ClientForm
+
+    def test_func(self):
+        """
+        Проверка (UserPassesTestMixin) является ли текущий пользователь автором клиента сервиса
+        """
+        obj = self.get_object()
+        return self.request.user == obj.author
 
     def get_success_url(self, *args, **kwargs):
         return reverse('mailing:client_detail', args=[self.get_object().pk])
 
 
-class ClientDelete(DeleteView):
+class ClientDelete(UserPassesTestMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('mailing:clients')
+
+    def test_func(self):
+        """
+        Проверка (UserPassesTestMixin) является ли текущий пользователь автором клиента сервиса
+        """
+        obj = self.get_object()
+        return self.request.user == obj.author
 # ---------------------------------------------------------------------------------------
 
 
-class MailSettingList(ListView):
+class MailSettingList(LoginRequiredMixin, ListView):
     model = MailSetting
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.is_staff or self.request.user.is_superuser:
+        if self.request.user.has_perm('mailing.view_mailsetting'):
             return queryset
         return MailSetting.objects.filter(author=self.request.user)
 
 
-
-class MailSettingDetail(DetailView):
+class MailSettingDetail(LoginRequiredMixin, DetailView):
     model = MailSetting
 
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     if self.request.user.has_perm('mailing.view_mailsetting'):
+    #         return queryset
+    #     return MailSetting.objects.filter(author=self.request.user)
 
-class MailSettingCreate(CreateView):
+
+class MailSettingCreate(UserPassesTestMixin, CreateView):
     model = MailSetting
     form_class = MailSettingForm
     success_url = reverse_lazy('mailing:mail-setting-list')
+
+    def test_func(self):
+        """
+        Проверка, что текущий пользователь не входит в группу managers
+        """
+        return not self.request.user.groups.filter(name='managers').exists()
 
     def form_valid(self, form):
         instance = form.save()
@@ -71,21 +103,39 @@ class MailSettingCreate(CreateView):
         return super().form_valid(form)
 
 
-class MailSettingUpdate(UpdateView):
+class MailSettingUpdate(UserPassesTestMixin, UpdateView):
     model = MailSetting
     form_class = MailSettingForm
+
+    def test_func(self):
+        """
+        Проверка (UserPassesTestMixin) является ли текущий пользователь автором рассылки
+        и не находится в группе managers
+        """
+        obj = self.get_object()
+        return self.request.user == obj.author
+               # and not self.request.user.groups.filter(name='managers').exists()
 
     def get_success_url(self, *args, **kwargs):
         return reverse('mailing:mail-setting-detail', args=[self.get_object().pk])
 
 
-class MailSettingDelete(DeleteView):
+class MailSettingDelete(UserPassesTestMixin, DeleteView):
     model = MailSetting
     success_url = reverse_lazy('mailing:mail-setting-list')
+
+    def test_func(self):
+        """
+        Проверка (UserPassesTestMixin) является ли текущий пользователь автором рассылки
+        и не находится в группе managers
+        """
+        obj = self.get_object()
+        return self.request.user == obj.author
+               # and not self.request.user.groups.filter(name='managers').exists()
 # ---------------------------------------------------------------------------------------
 
 
-class AttemptView(ListView):
+class AttemptView(LoginRequiredMixin, ListView):
     model = Attempt
 
 

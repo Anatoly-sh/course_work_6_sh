@@ -19,9 +19,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'mailing:clients' %}">Клиенты сервиса</a>
             </li>
+            {% if user.is_superuser or user.is_staff %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'users:users-list' %}">Пользователи сервиса</a>
             </li>
+                {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'mailing:mail-setting-list' %}">Список рассылок</a>
             </li>

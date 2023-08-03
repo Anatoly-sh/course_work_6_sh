@@ -1,12 +1,13 @@
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin, LoginRequiredMixin
 from django.core.mail import send_mail
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import UpdateView, CreateView, ListView
 from django_email_verification import send_email
 
 from config import settings
+from mailing.models import MailSetting
 from users.forms import CastomUserForm, CastomUserRegisterForm
 from users.models import User
 
@@ -54,5 +55,20 @@ class UserListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.has_perm('users.view_user'):
-            return queryset
+            return queryset.order_by('email')
         return queryset.filter(email=self.request.user)     # выводит только себя
+
+    # def get_context_data(self, *, object_list=None, **kwargs):
+
+
+def toggle_activity_user(request, pk):
+    """ Функция блокировки (переключения активности) пользователя"""
+    selected_user = get_object_or_404(User, pk=pk)
+    if selected_user.is_active:
+        selected_user.is_active = False
+    else:
+        selected_user.is_active = True
+    selected_user.save()
+
+    return redirect(reverse('users:users-list'))
+    # return redirect(reverse('users:users-list'))

@@ -15,13 +15,26 @@
         </thead>
         <tbody>
         {% for object in object_list %}
-            <tr>
-                <td>{{ object.pk }}</td>
-                <td>{{ object.email }}</td>
-                <td>{{ object.is_active }}</td>
-                <td><a class="btn btn-secondary" href="{% url 'users:profile' %}" role="button">Изменить>></a></td>
-            </tr>
+            {% if not object.is_superuser and not object.is_staff %}
+                <tr>
+                    <td>{{ object.pk }}</td>
+                    <td>{{ object.email }}</td>
+                    <td>{{ object.is_active }}</td>
+
+                    {% if object.is_active %}
+                        <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
+                               role="button">Деактивировать</a>
+                        </td>
+                    {% else %}
+                        <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
+                               role="button">Активировать</a>
+                        </td>
+                    {% endif %}
+
+                </tr>
+            {% endif %}
         {% endfor %}
+
         </tbody>
 
     </table>
@@ -30,5 +43,7 @@
 
 {% endblock %}
 
-    email = models.EmailField(unique=True, verbose_name='почта')
-    is_active = models.BooleanField(default=True, verbose_name='активный статус')
+email = models.EmailField(unique=True, verbose_name='почта')
+is_active = models.BooleanField(default=True, verbose_name='активный статус')
+
+{% url 'mailing:mail-setting-detail' object.pk %}

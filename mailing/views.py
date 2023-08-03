@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView, UpdateView
 
@@ -38,7 +38,7 @@ class ClientCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdate(UserPassesTestMixin, UpdateView):
+class ClientUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Client
     form_class = ClientForm
 
@@ -53,7 +53,7 @@ class ClientUpdate(UserPassesTestMixin, UpdateView):
         return reverse('mailing:client_detail', args=[self.get_object().pk])
 
 
-class ClientDelete(UserPassesTestMixin, DeleteView):
+class ClientDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('mailing:clients')
 
@@ -72,7 +72,7 @@ class MailSettingList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.has_perm('mailing.view_mailsetting'):
-            return queryset
+            return queryset.order_by('-mailing_start')
         return MailSetting.objects.filter(author=self.request.user)
 
 
@@ -86,7 +86,7 @@ class MailSettingDetail(LoginRequiredMixin, DetailView):
     #     return MailSetting.objects.filter(author=self.request.user)
 
 
-class MailSettingCreate(UserPassesTestMixin, CreateView):
+class MailSettingCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = MailSetting
     form_class = MailSettingForm
     success_url = reverse_lazy('mailing:mail-setting-list')
@@ -103,7 +103,7 @@ class MailSettingCreate(UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 
-class MailSettingUpdate(UserPassesTestMixin, UpdateView):
+class MailSettingUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = MailSetting
     form_class = MailSettingForm
 
@@ -120,7 +120,7 @@ class MailSettingUpdate(UserPassesTestMixin, UpdateView):
         return reverse('mailing:mail-setting-detail', args=[self.get_object().pk])
 
 
-class MailSettingDelete(UserPassesTestMixin, DeleteView):
+class MailSettingDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = MailSetting
     success_url = reverse_lazy('mailing:mail-setting-list')
 
@@ -141,3 +141,16 @@ class AttemptView(LoginRequiredMixin, ListView):
 
 class MainPage(TemplateView):
     template_name = 'mailing/base.html'     # временно
+
+
+def toggle_activity_mailing(request, pk):
+    """ Функция блокировки (переключения активности) рассылки"""
+    selected_mailing = get_object_or_404(MailSetting, pk=pk)
+    if selected_mailing.is_active:
+        selected_mailing.is_active = False
+    else:
+        selected_mailing.is_active = True
+    selected_mailing.save()
+
+    return redirect(reverse('mailing:mail-setting-list'))
+

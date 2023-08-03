@@ -1,5 +1,5 @@
 {% extends "mailing/base.html" %}
-
+{% load templatetagname %}
 {% block content %}
     <h2>Перечень рассылок сервиса</h2>
     {#    <div style="position: absolute; right: 9ch">#}
@@ -15,7 +15,10 @@
             <th scope="col">Статус</th>
             <th scope="col">Сообщение</th>
             <th scope="col">Кем создана</th>
-            <th scope="col"><a href="{% url 'mailing:mail-setting-create' %}" class="btn btn-primary">Новая рассылка</a></th>
+            {% if not request.user|has_group:'managers' %}
+                <th scope="col"><a href="{% url 'mailing:mail-setting-create' %}" class="btn btn-primary">Новая
+                    рассылка</a></th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -31,14 +34,14 @@
                 <td><a class="btn btn-secondary" href="{% url 'mailing:mail-setting-detail' object.pk %}"
                        role="button">Подробнее&raquo;</a></td>
                 {% if object.is_active %}
-                        <td><a class="btn btn-secondary" href="{% url 'mailing:toggle-activity-mailing'  object.pk %}"
-                               role="button">Деактивировать</a>
-                        </td>
-                    {% else %}
-                        <td><a class="btn btn-secondary" href="{% url 'mailing:toggle-activity-mailing'  object.pk %}"
-                               role="button">Активировать</a>
-                        </td>
-                    {% endif %}
+                    <td><a class="btn btn-secondary" href="{% url 'mailing:toggle-activity-mailing'  object.pk %}"
+                           role="button">Деактивировать</a>
+                    </td>
+                {% else %}
+                    <td><a class="btn btn-secondary" href="{% url 'mailing:toggle-activity-mailing'  object.pk %}"
+                           role="button">Активировать</a>
+                    </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
@@ -62,12 +65,12 @@
 {% if perms.mailing.can_deactivate_mailing %}
 {% endif %}
 
-                    {% if object.is_active %}
-                        <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
-                               role="button">Деактивировать</a>
-                        </td>
-                    {% else %}
-                        <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
-                               role="button">Активировать</a>
-                        </td>
-                    {% endif %}
+{% if object.is_active %}
+    <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
+           role="button">Деактивировать</a>
+    </td>
+{% else %}
+    <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
+           role="button">Активировать</a>
+    </td>
+{% endif %}

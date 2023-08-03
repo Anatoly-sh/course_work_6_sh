@@ -2,9 +2,7 @@
 
 {% block content %}
     <h2>Перечень пользователей сервиса</h2>
-    {#    <div style="position: absolute; right: 9ch">#}
-    {#        <a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Добавить запись</a>#}
-    {#    </div>#}
+
     <table class="table">
         <thead>
         <tr>
@@ -15,12 +13,11 @@
         </thead>
         <tbody>
         {% for object in object_list %}
-            {% if not object.is_superuser and not object.is_staff %}
-                <tr>
-                    <td>{{ object.pk }}</td>
-                    <td>{{ object.email }}</td>
-                    <td>{{ object.is_active }}</td>
-
+            <tr>
+                <td>{{ object.pk }}</td>
+                <td>{{ object.email }}</td>
+                <td>{{ object.is_active }}</td>
+                {% if not object.is_staff %}
                     {% if object.is_active %}
                         <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
                                role="button">Деактивировать</a>
@@ -30,20 +27,9 @@
                                role="button">Активировать</a>
                         </td>
                     {% endif %}
-
-                </tr>
-            {% endif %}
+                {% endif %}
+            </tr>
         {% endfor %}
-
         </tbody>
-
     </table>
-
-
-
 {% endblock %}
-
-email = models.EmailField(unique=True, verbose_name='почта')
-is_active = models.BooleanField(default=True, verbose_name='активный статус')
-
-{% url 'mailing:mail-setting-detail' object.pk %}

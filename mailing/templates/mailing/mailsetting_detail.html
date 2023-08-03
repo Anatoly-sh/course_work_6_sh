@@ -1,4 +1,5 @@
 {% extends "mailing/base.html" %}
+{% load templatetagname %}
 
 {% block content %}
     <h2>Информация по рассылке</h2>
@@ -14,12 +15,16 @@
         <p class="col-md-8 fs-5">Активация рассылки: {{ object.is_active }}</p>
         <div class="card-footer">
             <a href="{% url 'mailing:mail-setting-list' %}" class="btn btn-primary"><< Назад</a>
-            <a href="{% url 'mailing:mail-setting-update' object.pk %}" class="btn btn-warning">Изменить рассылку</a>
-            <a href="{% url 'mailing:mail-setting-delete' object.pk %}" class="btn btn-danger">Удалить рассылку</a>
-            {#            {% url 'mailing:client_delete' object.pk %}#}
+            {% if not user.is_superuser %}
+                {% if not request.user|has_group:'managers' or request.user == object.author %}
+                    <a href="{% url 'mailing:mail-setting-update' object.pk %}" class="btn btn-warning">Изменить
+                        рассылку</a>
+                    <a href="{% url 'mailing:mail-setting-delete' object.pk %}" class="btn btn-danger">Удалить
+                        рассылку</a>
+                {% endif %}
+            {% endif %}
         </div>
-
-    </div>
+   </div>
 {% endblock %}
 
 <div class="p-5 mb-4 bg-body-tertiary rounded-3">

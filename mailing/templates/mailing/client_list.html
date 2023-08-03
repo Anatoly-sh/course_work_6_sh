@@ -27,9 +27,8 @@
                     {% endif %}
                 </td>
                 <td>{{ object.author }}</td>
-                <td><a class="btn btn-secondary" href="{% url 'mailing:client_detail' object.pk %}" role="button">Подробнее
-                    &raquo;</a></td>
-                {#            {% url 'mailing:client_detail' object.pk %}#}
+                <td><a class="btn btn-secondary" href="{% url 'mailing:client_detail' object.pk %}"
+                       role="button">Подробнее&raquo;</a></td>
             </tr>
         {% endfor %}
         </tbody>

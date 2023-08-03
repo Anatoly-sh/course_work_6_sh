@@ -10,17 +10,17 @@ from mailing.models import Client, MailSetting, Attempt
 class ClientList(LoginRequiredMixin, ListView):
     model = Client
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if self.request.user.has_perm('mailing.view_client'):
-            return queryset
-        return Client.objects.filter(author=self.request.user)
-
     # def get_queryset(self):
     #     queryset = super().get_queryset()
-    #     if self.request.user.is_staff or self.request.user.is_superuser:
+    #     if self.request.user.has_perm('mailing.view_client'):
     #         return queryset
     #     return Client.objects.filter(author=self.request.user)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return queryset
+        return Client.objects.filter(author=self.request.user)
 
 
 class ClientDetail(LoginRequiredMixin, DetailView):
@@ -71,10 +71,10 @@ class MailSettingList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.has_perm('mailing.view_mailsetting'):
+        if self.request.user.is_staff or self.request.user.is_superuser:
             return queryset.order_by('-mailing_start')
-        return MailSetting.objects.filter(author=self.request.user)
-
+        return MailSetting.objects.filter(author=self.request.user).order_by('-mailing_start')
+    
 
 class MailSettingDetail(LoginRequiredMixin, DetailView):
     model = MailSetting

@@ -7,7 +7,7 @@
         <p class="col-md-8 fs-5">Полное имя: {{ object.full_name }}</p>
         <p class="col-md-8 fs-5">Комментарий: {{ object.comment }}</p>
         <div class="card-footer">
-            <a href="{% url 'mailing:clients' %}" class="btn btn-primary"><< Назад</a>
+            <a href="{% url 'mailing:client_detail'  object.pk %}" class="btn btn-primary"><< Назад</a>
         </div>
     </div>
     <div class="col">

@@ -62,15 +62,15 @@
 </div>
 
 
-{% if perms.mailing.can_deactivate_mailing %}
-{% endif %}
-
-{% if object.is_active %}
-    <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
-           role="button">Деактивировать</a>
-    </td>
-{% else %}
-    <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"
-           role="button">Активировать</a>
-    </td>
-{% endif %}
+{#{% if perms.mailing.can_deactivate_mailing %}#}
+{#{% endif %}#}
+{##}
+{#{% if object.is_active %}#}
+{#    <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"#}
+{#           role="button">Деактивировать</a>#}
+{#    </td>#}
+{#{% else %}#}
+{#    <td><a class="btn btn-secondary" href="{% url 'users:toggle-activity-user'  object.pk %}"#}
+{#           role="button">Активировать</a>#}
+{#    </td>#}
+{#{% endif %}#}

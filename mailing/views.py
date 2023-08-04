@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -74,7 +75,7 @@ class MailSettingList(LoginRequiredMixin, ListView):
         if self.request.user.is_staff or self.request.user.is_superuser:
             return queryset.order_by('-mailing_start')
         return MailSetting.objects.filter(author=self.request.user).order_by('-mailing_start')
-    
+
 
 class MailSettingDetail(LoginRequiredMixin, DetailView):
     model = MailSetting
@@ -143,6 +144,7 @@ class MainPage(TemplateView):
     template_name = 'mailing/base.html'     # временно
 
 
+# @permission_required(perm='mailing.can_deactivate_mailing')
 def toggle_activity_mailing(request, pk):
     """ Функция блокировки (переключения активности) рассылки"""
     selected_mailing = get_object_or_404(MailSetting, pk=pk)

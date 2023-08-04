@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin, LoginRequiredMixin
 from django.core.mail import send_mail
@@ -70,6 +71,7 @@ class UserListView(LoginRequiredMixin, ListView):
     #     return MailSetting.objects.filter(author=self.request.user).order_by('-mailing_start')
 
 
+@permission_required(perm='users.set_active_user')
 def toggle_activity_user(request, pk):
     """ Функция блокировки (переключения активности) пользователя"""
     selected_user = get_object_or_404(User, pk=pk)
@@ -80,4 +82,3 @@ def toggle_activity_user(request, pk):
     selected_user.save()
 
     return redirect(reverse('users:users-list'))
-    # return redirect(reverse('users:users-list'))

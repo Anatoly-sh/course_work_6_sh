@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mailing.apps.MailingConfig',
+    'blog.apps.BlogConfig',
     'crispy_forms',
     'crispy_bootstrap4',
     'django_crontab',

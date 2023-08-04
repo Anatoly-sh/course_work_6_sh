@@ -56,19 +56,9 @@ class UserListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.groups.filter(name='managers').exists() or self.request.user.is_superuser:
-            print(self.request.user)
-            print(queryset)
             return queryset.order_by('email')
         print(queryset)
         return queryset.filter(email=self.request.user)     # выводит только себя
-
-    # self.request.user.groups.filter(name='managers').exists()
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     if self.request.user.is_staff or self.request.user.is_superuser:
-    #         return queryset.order_by('-mailing_start')
-    #     return MailSetting.objects.filter(author=self.request.user).order_by('-mailing_start')
 
 
 @permission_required(perm='users.set_active_user')

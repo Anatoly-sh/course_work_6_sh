@@ -2,13 +2,13 @@
     <!-- Navbar content -->
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'mailing:main' %}">Главная</a>
+{#            <a class="nav-link active" aria-current="page" href="{% url 'mailing:main' %}">Главная</a>#}
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Блоги</a>
+            <a class="nav-link" href="{% url 'blog:blog-view' %}">Блоги</a>
         </li>
         {% if not user.is_authenticated %}
-            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'users:register' %}">Регистрация</a>
             </li>

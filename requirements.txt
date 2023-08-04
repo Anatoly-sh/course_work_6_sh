@@ -6,4 +6,4 @@ psycopg2-binary
 crispy-bootstrap4
 django_crontab
 deprecation
-
+Pillow

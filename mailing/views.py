@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView, UpdateView
 
+from blog.models import Blog
 from mailing.form import ClientForm, MailSettingForm
 from mailing.models import Client, MailSetting, Attempt
 
@@ -141,7 +142,21 @@ class AttemptView(LoginRequiredMixin, ListView):
 
 
 class MainPage(TemplateView):
-    template_name = 'mailing/base.html'     # временно
+    """Главная страница"""
+    template_name = 'mailing/index.html'
+
+    def get_context_data(self, **kwargs):
+        blog = Blog.objects.order_by('?')[:3]  # выборка из БД Blog 3 случайных статьи
+        uniq_clients_count = len(Client.objects.all().distinct('email_contact'))    # уникальные клиенты по почте
+        settings_count = len(MailSetting.objects.all())                             # подсчёт кол-во рассылок
+        settings_active = len(MailSetting.objects.filter(status='launched'))        # подсчёт кол-во активных рассылок
+        context = super().get_context_data()
+        context['settings_count'] = settings_count
+        context['settings_active'] = settings_active
+        context['clients_count'] = uniq_clients_count
+        context['blogs_3'] = blog
+
+        return context
 
 
 # @permission_required(perm='mailing.can_deactivate_mailing')

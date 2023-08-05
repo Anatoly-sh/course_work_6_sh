@@ -1,0 +1,63 @@
+{% extends "mailing/base.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Главная страница сервиса рассылок</h2>
+    <hr>
+    <img src="/media/blog/i.webp" width="50" height="50" alt=""/>
+    <img src="/media/blog/i (1).webp" width="50" height="50" alt=""/>
+    <img src="/media/blog/i (2).webp" width="50" height="50" alt=""/>
+    <img src="/media/blog/i (3).webp" width="50" height="50" alt=""/>
+    <img src="/media/blog/i (4).webp" width="50" height="50" alt=""/>
+    <img src="/media/blog/images (1).png" width="50" height="50" alt=""/>
+    <img src="/media/blog/images (2).png" width="50" height="50" alt=""/>
+    <img src="/media/blog/images (3).png" width="50" height="50" alt=""/>
+    <hr>
+    <div class="container-fluid py-1">
+
+        <p class="col-md-8 fs-5"><u>Всего выполнено рассылок:</u> {{ settings_count }}</p>
+        <p class="col-md-8 fs-5"><u>Количество активных рассылок:</u> {{ settings_active }}</p>
+        <p class="col-md-8 fs-5"><u>Количество клиентов рассылок:</u> {{ clients_count }}</p>
+        <div class="card-footer">
+
+        </div>
+    </div>
+
+
+    {#    <div style="position: absolute; right: 9ch">#}
+    {#        <a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Добавить запись</a>#}
+    {#    </div>#}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Изображение</th>
+            <th scope="col">Заголовок</th>
+            <th scope="col">Содержимое статьи</th>
+            <th scope="col">Дата публикации</th>
+            <th scope="col">Количество просмотров</th>
+            {#            <th scope="col"><a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Новый клиент</a></th>#}
+        </tr>
+        </thead>
+        <tbody>
+        {% for object in blogs_3 %}
+            <tr>
+                <td><img src="/media/{{ object.image }}" width="100" height="100" alt=""/></td>
+                <td>{{ object.header }}</td>
+                {% if object.content|length > 300 %}
+                    <td>{{ object.content|slice:":300" }} ...</td>
+                {% else %}
+                    <td>{{ object.content }}</td>
+                {% endif %}
+                <td>{{ object.published_date }}</td>
+                <td>{{ object.views_number }}</td>
+{#                <td><a class="btn btn-secondary" href="{% url 'blog:blog-detail-view' object.pk %}" role="button">Подробнее&raquo;</a>#}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+
+
+{% endblock %}

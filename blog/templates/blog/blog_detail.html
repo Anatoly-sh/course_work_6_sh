@@ -11,15 +11,9 @@
         <a href="{% url 'blog:blog-view' %}" class="btn btn-primary"><< Назад</a>
     </div>
 </div>
-
-
     <hr>
     <div class="container-fluid py-5">
-
-
         <h5 class="display-6 fw-bold">{{ object.email_contact }}</h5>
-
-
         <p class="col-md-8 fs-5"><u>Заголовок:</u> {{ object.header }}</p>
         <p class="col-md-8 fs-5"><u>Содержимое статьи:</u> {{ object.content }}</p>
         <p class="col-md-8 fs-5"><u>Дата публикации:</u> {{ object.published_date }}</p>

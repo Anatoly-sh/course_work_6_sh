@@ -22,8 +22,8 @@
             <tr>
                 <td><img src="/media/{{object.image}}" width="100" height="100" alt=""/></td>
                 <td>{{ object.header }}</td>
-                {% if object.comment|length > 30 %}...
-                    <td>{{ object.comment|slice:":30" }}</td>
+                {% if object.content|length > 300 %}
+                    <td>{{ object.content|slice:":300" }} ...</td>
                 {% else %}
                     <td>{{ object.content }}</td>
                 {% endif %}

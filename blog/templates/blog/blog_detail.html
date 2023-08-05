@@ -1,0 +1,42 @@
+{% extends "mailing/base.html" %}
+{#{% load templatetagname %}#}
+
+{% block content %}
+    <br>
+    <div class="row">
+    <div class="col-md-6">
+        <h2>Статья подробно </h2>
+    </div>
+    <div class="col-md-2 col-md-offset-2">
+        <a href="{% url 'blog:blog-view' %}" class="btn btn-primary"><< Назад</a>
+    </div>
+</div>
+
+
+    <hr>
+    <div class="container-fluid py-5">
+
+
+        <h5 class="display-6 fw-bold">{{ object.email_contact }}</h5>
+
+
+        <p class="col-md-8 fs-5"><u>Заголовок:</u> {{ object.header }}</p>
+        <p class="col-md-8 fs-5"><u>Содержимое статьи:</u> {{ object.content }}</p>
+        <p class="col-md-8 fs-5"><u>Дата публикации:</u> {{ object.published_date }}</p>
+        <p class="col-md-8 fs-5"><u>Количество просмотров:</u> {{ object.views_number }}</p>
+        <div class="card-footer">
+
+        </div>
+    </div>
+{% endblock %}
+
+<div class="p-5 mb-4 bg-body-tertiary rounded-3">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Custom jumbotron</h1>
+        <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in
+            previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your
+            liking.</p>
+        <button class="btn btn-primary btn-lg" type="button">Example button</button>
+    </div>
+</div>
+

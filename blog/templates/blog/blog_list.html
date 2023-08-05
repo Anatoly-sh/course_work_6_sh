@@ -29,8 +29,7 @@
                 {% endif %}
                 <td>{{ object.published_date }}</td>
                 <td>{{ object.views_number }}</td>
-                <td><a class="btn btn-secondary" href="{% url 'mblog:blog_detail' object.pk %}"
-                       role="button">Подробнее&raquo;</a></td>
+                <td><a class="btn btn-secondary" href="{% url 'blog:blog-detail-view' object.pk %}" role="button">Подробнее&raquo;</a></td>
             </tr>
         {% endfor %}
         </tbody>

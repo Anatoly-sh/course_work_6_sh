@@ -12,6 +12,8 @@
     <img src="/media/blog/images (1).png" width="50" height="50" alt=""/>
     <img src="/media/blog/images (2).png" width="50" height="50" alt=""/>
     <img src="/media/blog/images (3).png" width="50" height="50" alt=""/>
+    <img src="/media/blog/i (3).webp" width="50" height="50" alt=""/>
+    <img src="/media/blog/i (4).webp" width="50" height="50" alt=""/>
     <hr>
     <div class="container-fluid py-1">
 
@@ -23,10 +25,6 @@
         </div>
     </div>
 
-
-    {#    <div style="position: absolute; right: 9ch">#}
-    {#        <a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Добавить запись</a>#}
-    {#    </div>#}
     <table class="table">
         <thead>
         <tr>
@@ -35,7 +33,6 @@
             <th scope="col">Содержимое статьи</th>
             <th scope="col">Дата публикации</th>
             <th scope="col">Количество просмотров</th>
-            {#            <th scope="col"><a href="{% url 'mailing:client_create' %}" class="btn btn-primary">Новый клиент</a></th>#}
         </tr>
         </thead>
         <tbody>
@@ -50,7 +47,6 @@
                 {% endif %}
                 <td>{{ object.published_date }}</td>
                 <td>{{ object.views_number }}</td>
-{#                <td><a class="btn btn-secondary" href="{% url 'blog:blog-detail-view' object.pk %}" role="button">Подробнее&raquo;</a>#}
                 </td>
             </tr>
         {% endfor %}

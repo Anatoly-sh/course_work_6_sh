@@ -165,11 +165,10 @@ DEFAULT_FROM_EMAIL = 'anatoly.shapovalov1957@yandex.ru'
 SERVER_EMAIL = 'anatoly.shapovalov1957@yandex.ru'
 
 CRONJOBS = [
-    ('* * * * *', 'mailing.services.send_auto'),  # for tests
-    # ('* * * * *', 'mailing.services.send_auto', ['Раз в день']), # for tests
-    # ('0 0 * * *', 'mailing.services.send_auto', ['Раз в день']),
-    # ('0 0 * * 0', 'mailing.services.send_auto', ['Раз в неделю']),
-    # ('0 0 1 * *', 'mailing.services.send_auto', ['Раз в месяц']),
+    # ('* * * * *', 'mailing.services.send_auto'),  # for tests
+    ('0 0 * * *', 'mailing.services.send_auto', ['Раз в день']),
+    ('0 0 * * 0', 'mailing.services.send_auto', ['Раз в неделю']),
+    ('0 0 1 * *', 'mailing.services.send_auto', ['Раз в месяц']),
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -178,3 +177,11 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'
+
+CACHE_ENABLED = False
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}

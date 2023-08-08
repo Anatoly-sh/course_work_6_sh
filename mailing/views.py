@@ -142,7 +142,7 @@ class AttemptView(LoginRequiredMixin, ListView):
 
 
 class MainPage(TemplateView):
-    """Главная страница"""
+    """ Главная страница """
     template_name = 'mailing/index.html'
 
     def get_context_data(self, **kwargs):

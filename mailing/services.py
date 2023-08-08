@@ -1,9 +1,8 @@
-from django.core.mail import send_mail
-
+from blog.models import Blog
 from mailing.management.commands.send_command import Command, mailing_subject_renew, \
     mailing_subject_select_for_command_handle, mailing_and_statistic, db_test
-# from config import settings
-from mailing.models import *
+from django.conf import settings
+from django.core.cache import cache
 
 
 def send_auto(*args):
@@ -33,26 +32,14 @@ def send_auto(*args):
     # ------------------------------------------------------
 
 
-
-
-    # email_s = []  # список почтовых адресов клиентов для рассылки
-    # for client in Client.objects.all():  # отфильтровать клиентов пользователя!!!
-    #     email_s.append(str(client.email_contact))
-    #     # print(client.email_contact)
-    #
-    # for mailing in MailSetting.objects.all():  # перебор рассылок
-    #     mess = mailing.message
-    #     print(mess)
-    #     message_obj = Message.objects.filter(letter_subject=mess)
-    #     for mess in message_obj:  # для каждой рассылки
-    #         print(mess.letter_subject)
-    #         print(mess.letter_body)
-    #         print(mailing.status)
-    #         print('---------------------------------------')
-            # send_mail(
-            #     subject=mess.letter_subject,
-            #     message=mess.letter_body,
-            #     from_email=settings.EMAIL_HOST_USER,
-            #     recipient_list=[*email_s],
-            #     fail_silently=False,
-            # )
+def get_cached_blog_view():
+    """Низкоуровневое кеширование"""
+    data = Blog.objects.all()
+    if settings.CACHE_ENABLED:
+        key = 'blog_list'
+        blog_list = cache.get(key)
+        if blog_list is None:
+            blog_list = data
+            cache.set(key, blog_list)
+        return blog_list
+    return data

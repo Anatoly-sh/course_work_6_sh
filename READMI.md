@@ -39,3 +39,5 @@ EMAIL_MULTI_USER: (необязательно), если True ошибка не 
 EMAIL_VERIFIED_CALLBACK может быть функцией в AUTH_USER_MODEL, например:
 
 EMAIL_VERIFIED_CALLBACK = get_user_model().verified_callback
+
+Запуск redis: redis-server
